@@ -1,0 +1,31 @@
+# Virtual Environments
+venv/
+.venv/
+env/
+__pycache__/
+*.py[cod]
+
+# Node Modules
+node_modules/
+dist/
+dist-ssr/
+*.local
+
+# ML Models (Large Files)
+ml-models/
+*.bin
+*.pt
+*.onnx
+
+# Environment Variables
+.env
+.env.local
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db

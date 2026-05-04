@@ -1,0 +1,9 @@
+fastapi
+uvicorn
+openai-whisper
+transformers
+torch
+python-multipart
+websockets
+jinja2
+pydantic
