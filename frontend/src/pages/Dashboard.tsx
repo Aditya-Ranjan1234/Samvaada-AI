@@ -1,4 +1,6 @@
 const Dashboard = () => {
+  const [showSettings, setShowSettings] = useState(false);
+  const [showProfile, setShowProfile] = useState(false);
   return (
     <div className="bg-[#f9f9ff] text-on-background font-body-md overflow-hidden h-screen flex flex-col">
       {/* Top Navbar */}
@@ -22,13 +24,13 @@ const Dashboard = () => {
           <div className="flex items-center gap-3">
             <span className="material-symbols-outlined text-slate-500 cursor-pointer">notifications</span>
                 <button 
-                  onClick={() => alert("Settings Panel Opening...")}
+                  onClick={() => setShowSettings(!showSettings)}
                   className="material-symbols-outlined text-slate-500 cursor-pointer hover:bg-slate-50 p-2 rounded-full"
                 >
                   settings
                 </button>
                 <div 
-                  onClick={() => alert("Operator Profile: Ramesh K.")}
+                  onClick={() => setShowProfile(!showProfile)}
                   className="w-8 h-8 rounded-full bg-slate-200 overflow-hidden ml-2 border border-slate-200 cursor-pointer hover:ring-2 hover:ring-blue-500 transition-all"
                 >
               <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuAPurKNj_xLrxBpKrdHgJ76c_TKalq-hBo5zeh-dJV07PmRT9yX93MPO-slCaSh0UZQRVrxBEhPlVBQZNpOcXNS-kQ_iebOJ-TSvhFhugwVAVltdY2MC382zpDnp4QUY4clar11p0vbBaYgJVeaDR_iN0NOcCbaFKp6GPqpYnXN6lm_B9XeMCwFV9SfTtVsQIhBmObOk4HO7VoLIok-Nk6CwivGNway8y6nnUoumLCAPULaKNKuRj3thiockS7pYy_Zm-TRuujjzL4" alt="Agent" />
@@ -233,6 +235,47 @@ const Dashboard = () => {
            </div>
         </aside>
       </div>
+      {/* Slide-over Panels */}
+      {showSettings && (
+        <div className="absolute right-0 top-0 h-full w-80 bg-white shadow-2xl z-[100] p-8 border-l border-slate-200 transform transition-all">
+          <div className="flex justify-between items-center mb-8">
+            <h3 className="text-xl font-bold">System Settings</h3>
+            <span className="material-symbols-outlined cursor-pointer" onClick={() => setShowSettings(false)}>close</span>
+          </div>
+          <div className="space-y-4">
+            <div className="p-4 bg-slate-50 rounded-xl">
+              <label className="text-xs font-bold uppercase text-slate-500">Audio Input</label>
+              <select className="w-full mt-2 p-2 bg-white border border-slate-200 rounded-lg">
+                <option>Default Microphone</option>
+              </select>
+            </div>
+            <div className="p-4 bg-slate-50 rounded-xl">
+              <label className="text-xs font-bold uppercase text-slate-500">Language Auto-Detection</label>
+              <div className="flex items-center gap-2 mt-2">
+                <input type="checkbox" checked readOnly />
+                <span className="text-sm">Enabled (MMS-LID)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+      
+      {showProfile && (
+        <div className="absolute right-0 top-0 h-full w-80 bg-white shadow-2xl z-[100] p-8 border-l border-slate-200 transform transition-all">
+          <div className="flex justify-between items-center mb-8">
+            <h3 className="text-xl font-bold">Operator Profile</h3>
+            <span className="material-symbols-outlined cursor-pointer" onClick={() => setShowProfile(false)}>close</span>
+          </div>
+          <div className="flex flex-col items-center">
+            <div className="w-24 h-24 rounded-full bg-slate-100 mb-4 overflow-hidden border-4 border-white shadow-lg">
+               <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuAPurKNj_xLrxBpKrdHgJ76c_TKalq-hBo5zeh-dJV07PmRT9yX93MPO-slCaSh0UZQRVrxBEhPlVBQZNpOcXNS-kQ_iebOJ-TSvhFhugwVAVltdY2MC382zpDnp4QUY4clar11p0vbBaYgJVeaDR_iN0NOcCbaFKp6GPqpYnXN6lm_B9XeMCwFV9SfTtVsQIhBmObOk4HO7VoLIok-Nk6CwivGNway8y6nnUoumLCAPULaKNKuRj3thiockS7pYy_Zm-TRuujjzL4" alt="Ramesh" />
+            </div>
+            <h4 className="text-lg font-bold">Ramesh K.</h4>
+            <p className="text-xs text-slate-500 font-bold uppercase tracking-widest">Lead Operator</p>
+            <button className="mt-8 w-full py-3 bg-red-50 text-red-600 font-bold rounded-xl hover:bg-red-100 transition-all">Log Out</button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
