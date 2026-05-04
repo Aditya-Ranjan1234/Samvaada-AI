@@ -23,3 +23,21 @@ class Transcript(Base):
     text = Column(String)
     timestamp = Column(DateTime, default=datetime.datetime.utcnow)
     confidence = Column(Float)
+
+class User(Base):
+    __tablename__ = "users"
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    username = Column(String, unique=True, index=True)
+    full_name = Column(String)
+    hashed_password = Column(String)
+    role = Column(String, default="AGENT") # AGENT, SUPERVISOR, ADMIN
+    is_active = Column(Boolean, default=True)
+    created_at = Column(DateTime, default=datetime.datetime.utcnow)
+
+class AgentStats(Base):
+    __tablename__ = "agent_stats"
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    user_id = Column(Integer, ForeignKey("users.id"))
+    total_calls = Column(Integer, default=0)
+    avg_handling_time = Column(Float, default=0.0) # in seconds
+    last_active = Column(DateTime, default=datetime.datetime.utcnow)

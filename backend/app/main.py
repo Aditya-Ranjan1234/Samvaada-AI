@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.routes import calls, asr, nlu
+from app.routes import calls, asr, nlu, tts, users
 from app.websocket import manager
 from app.database import init_db
 
@@ -26,6 +26,8 @@ app.add_middleware(
 app.include_router(calls.router, prefix="/api/v1/calls", tags=["Calls"])
 app.include_router(asr.router, prefix="/api/v1/asr", tags=["ASR"])
 app.include_router(nlu.router, prefix="/api/v1/nlu", tags=["NLU"])
+app.include_router(tts.router, prefix="/api/v1/tts", tags=["TTS"])
+app.include_router(users.router, prefix="/api/v1/users", tags=["Users"])
 app.include_router(manager.router, prefix="/ws", tags=["WebSocket"])
 
 @app.get("/health")
