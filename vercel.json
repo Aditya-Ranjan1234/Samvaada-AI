@@ -4,11 +4,16 @@
     {
       "src": "frontend/package.json",
       "use": "@vercel/static-build",
-      "config": { "distDir": "dist" }
+      "config": {
+        "distDir": "dist",
+        "installCommand": "npm install",
+        "buildCommand": "npm run build"
+      }
     },
     {
       "src": "backend/app/main.py",
-      "use": "@vercel/python"
+      "use": "@vercel/python",
+      "config": { "maxDuration": 60 }
     }
   ],
   "rewrites": [
@@ -18,7 +23,7 @@
     },
     {
       "source": "/(.*)",
-      "destination": "/frontend/$1"
+      "destination": "frontend/$1"
     }
   ]
 }

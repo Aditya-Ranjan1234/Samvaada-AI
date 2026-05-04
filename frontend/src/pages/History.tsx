@@ -1,5 +1,3 @@
-import React from 'react';
-
 const History = () => {
   return (
     <div className="bg-background text-on-background font-body-md overflow-hidden h-screen flex flex-col">

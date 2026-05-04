@@ -1,8 +1,4 @@
-import React, { useState } from 'react';
-
 const Dashboard = () => {
-  const [activeCallId, setActiveCallId] = useState('#CALL-2940');
-
   return (
     <div className="bg-[#f9f9ff] text-on-background font-body-md overflow-hidden h-screen flex flex-col">
       {/* Top Navbar */}

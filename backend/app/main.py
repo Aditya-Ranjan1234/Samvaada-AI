@@ -2,12 +2,16 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.routes import calls, asr, nlu
 from app.websocket import manager
+from app.database import init_db
 
 app = FastAPI(
     title="Samvaada AI API",
     description="Backend API for Samvaada AI Helpline System",
     version="1.0.0"
 )
+
+# Create tables in the database
+init_db()
 
 # CORS
 app.add_middleware(

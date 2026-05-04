@@ -1,5 +1,3 @@
-import React from 'react';
-
 const Supervisor = () => {
   return (
     <div className="bg-[#f9f9ff] text-on-surface font-body-md overflow-hidden h-screen flex flex-col">
