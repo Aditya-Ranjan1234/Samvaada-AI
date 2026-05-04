@@ -8,14 +8,13 @@ __pycache__/
 # Node Modules
 node_modules/
 dist/
-dist-ssr/
-*.local
 
-# ML Models (Large Files)
+# ML Models (CRITICAL: EXCLUDE FROM CLOUD)
 ml-models/
-*.bin
 *.pt
+*.bin
 *.onnx
+*.safetensors
 
 # Environment Variables
 .env
@@ -24,8 +23,3 @@ ml-models/
 # IDEs
 .vscode/
 .idea/
-*.swp
-
-# OS
-.DS_Store
-Thumbs.db

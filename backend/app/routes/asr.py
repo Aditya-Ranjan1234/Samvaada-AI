@@ -1,16 +1,27 @@
-from fastapi import APIRouter
-from pydantic import BaseModel
+import os
+import requests
+from fastapi import APIRouter, UploadFile, File
+from app.config import settings
 
 router = APIRouter()
 
-class ProcessRequest(BaseModel):
-    audio_base64: str
+# Hugging Face API Configuration
+HF_API_URL = "https://api-inference.huggingface.co/models/openai/whisper-tiny"
+HF_TOKEN = os.getenv("HF_TOKEN") # Add this to your Vercel Environment Variables
 
-@router.post("/process")
-async def process_asr(request: ProcessRequest):
-    # Mock ASR processing
-    return {
-        "transcript": "Namaskara, namma eariyadalli neeru bandilla.",
-        "confidence": 0.95,
-        "language": "kn"
-    }
+@router.post("/transcribe")
+async def transcribe_audio(file: File = UploadFile(...)):
+    # Check if we should use local or cloud models
+    if os.getenv("VERCEL"):
+        # CLOUD MODE: Call Hugging Face API
+        headers = {"Authorization": f"Bearer {HF_TOKEN}"}
+        audio_data = await file.read()
+        response = requests.post(HF_API_URL, headers=headers, data=audio_data)
+        return response.json()
+    else:
+        # LOCAL MODE: Use local Whisper
+        import whisper
+        model_path = "ml-models/asr/tiny.pt"
+        model = whisper.load_model("tiny", download_root="ml-models/asr")
+        # Save temp file and transcribe...
+        return {"text": "Local transcription simulated"}

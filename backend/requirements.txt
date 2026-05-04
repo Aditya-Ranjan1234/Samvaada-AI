@@ -1,8 +1,5 @@
 fastapi
 uvicorn
-openai-whisper
-transformers
-torch
 python-multipart
 websockets
 jinja2
@@ -10,3 +7,4 @@ pydantic
 pydantic-settings
 sqlalchemy
 psycopg2-binary
+requests
