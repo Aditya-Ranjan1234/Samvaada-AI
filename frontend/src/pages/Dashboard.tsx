@@ -21,8 +21,16 @@ const Dashboard = () => {
           </div>
           <div className="flex items-center gap-3">
             <span className="material-symbols-outlined text-slate-500 cursor-pointer">notifications</span>
-            <span className="material-symbols-outlined text-slate-500 cursor-pointer">settings</span>
-            <div className="h-8 w-8 rounded-full overflow-hidden border border-slate-200 ml-2">
+                <button 
+                  onClick={() => alert("Settings Panel Opening...")}
+                  className="material-symbols-outlined text-slate-500 cursor-pointer hover:bg-slate-50 p-2 rounded-full"
+                >
+                  settings
+                </button>
+                <div 
+                  onClick={() => alert("Operator Profile: Ramesh K.")}
+                  className="w-8 h-8 rounded-full bg-slate-200 overflow-hidden ml-2 border border-slate-200 cursor-pointer hover:ring-2 hover:ring-blue-500 transition-all"
+                >
               <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuAPurKNj_xLrxBpKrdHgJ76c_TKalq-hBo5zeh-dJV07PmRT9yX93MPO-slCaSh0UZQRVrxBEhPlVBQZNpOcXNS-kQ_iebOJ-TSvhFhugwVAVltdY2MC382zpDnp4QUY4clar11p0vbBaYgJVeaDR_iN0NOcCbaFKp6GPqpYnXN6lm_B9XeMCwFV9SfTtVsQIhBmObOk4HO7VoLIok-Nk6CwivGNway8y6nnUoumLCAPULaKNKuRj3thiockS7pYy_Zm-TRuujjzL4" alt="Agent" />
             </div>
           </div>
@@ -150,9 +158,14 @@ const Dashboard = () => {
               <div className="flex-1 relative">
                  <input className="w-full h-12 bg-slate-50 border border-slate-200 rounded-lg px-6 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-primary" placeholder="Type response or select recommended response..." />
               </div>
-              <button className="bg-primary text-white h-12 px-8 rounded-lg font-bold flex items-center gap-3 shadow-lg active:scale-95 transition-all">
-                 Send <span className="material-symbols-outlined">send</span>
-              </button>
+              <div className="flex gap-2">
+                <button 
+                  onClick={() => alert("Initializing Live AI Call Simulation...")}
+                  className="bg-primary text-white px-6 py-2.5 rounded-xl font-bold flex items-center gap-2 hover:bg-black transition-all shadow-lg active:scale-95"
+                >
+                  <span className="material-symbols-outlined text-[18px]">add_call</span> New AI Call
+                </button>
+              </div>
               <button className="bg-red-600 text-white h-12 px-8 rounded-lg font-bold flex items-center gap-3 shadow-lg active:scale-95 transition-all ml-4">
                  <span className="material-symbols-outlined">call_end</span> End & Log Ticket
               </button>

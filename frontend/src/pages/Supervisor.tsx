@@ -1,4 +1,21 @@
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+
 const Supervisor = () => {
+  const [stats, setStats] = useState({ active_agents: 0, total_calls_today: 0, avg_accuracy: 0 });
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const response = await axios.get('/api/v1/users/stats');
+        setStats(response.data);
+      } catch (error) {
+        console.error("Failed to fetch supervisor stats", error);
+      }
+    };
+    fetchStats();
+  }, []);
+
   return (
     <div className="bg-[#f9f9ff] text-on-surface font-body-md overflow-hidden h-screen flex flex-col">
       {/* TopAppBar */}
@@ -11,8 +28,13 @@ const Supervisor = () => {
           </div>
           <div className="flex items-center gap-3">
             <span className="material-symbols-outlined text-slate-500 cursor-pointer hover:bg-slate-50 p-2 rounded-full">notifications</span>
-            <span className="material-symbols-outlined text-slate-500 cursor-pointer hover:bg-slate-50 p-2 rounded-full">settings</span>
-            <div className="w-8 h-8 rounded-full bg-slate-200 overflow-hidden ml-2 border border-slate-200">
+            <button 
+              onClick={() => alert("Global System Settings")}
+              className="material-symbols-outlined text-slate-500 cursor-pointer hover:bg-slate-50 p-2 rounded-full"
+            >
+              settings
+            </button>
+            <div className="w-8 h-8 rounded-full bg-slate-200 overflow-hidden ml-2 border border-slate-200 cursor-pointer">
               <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuCNoCQUspZyWDLDzPVnTK-JatDOrTnYL3f-V4TDTgKZ29swkrNET3G-X4xqIlqjI0Hk8pnzb8SrjjRfRlkFB_HDOlT4fOF1K3JO7075g-8qNhsxHt9jwCG5bW4mWTex3WDxfQ2d896REx1G_Gmg1Ppu0Exv-dnJC9dIEltPrjH_IVOi1KbdPrMttWernlN2r2xkOyYlxDapVkhpd2I9X6uhKfVUTbf8B6fdNz_Jve6aJohtQiq2TFRS4FLEqpWQLEYJWe8oBae7crc" alt="Supervisor" />
             </div>
           </div>
@@ -65,10 +87,10 @@ const Supervisor = () => {
             {/* KPI Row */}
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
               {[
-                { label: 'Total Calls Today', value: '12,482', change: '+12%', color: 'green' },
+                { label: 'Total Calls Today', value: stats.total_calls_today, change: '+12%', color: 'green' },
                 { label: 'Avg. Handling Time', value: '4m 12s', change: '-2.4s', color: 'red' },
-                { label: 'Verification Accuracy', value: '98.4%', change: '99.2%', color: 'green' },
-                { label: 'Active Agents', value: '154', change: 'LIVE', color: 'blue' },
+                { label: 'Verification Accuracy', value: `${(stats.avg_accuracy * 100).toFixed(1)}%`, change: '99.2%', color: 'green' },
+                { label: 'Active Agents', value: stats.active_agents, change: 'LIVE', color: 'blue' },
               ].map((kpi, i) => (
                 <div key={i} className="bg-white p-6 border border-slate-200 rounded-2xl shadow-sm">
                   <div className="flex justify-between items-start mb-2">
@@ -129,30 +151,6 @@ const Supervisor = () => {
                        </div>
                      ))}
                   </div>
-               </div>
-            </div>
-
-            {/* Heatmap Section */}
-            <div className="col-span-12 bg-white p-8 border border-slate-200 rounded-3xl shadow-sm mt-8">
-               <div className="flex justify-between items-center mb-8">
-                  <div>
-                     <h3 className="text-xl font-bold text-primary">Sentiment Heatmap</h3>
-                     <p className="text-xs text-slate-500 font-medium mt-1">Karnataka Districts - Citizen Sentiment Live Feed</p>
-                  </div>
-                  <div className="flex items-center gap-4 bg-slate-50 p-3 rounded-xl border border-slate-100">
-                     <div className="flex items-center gap-2">
-                        <span className="w-2.5 h-2.5 rounded-full bg-red-500"></span>
-                        <span className="text-[10px] font-bold text-slate-600 uppercase">Concerned</span>
-                     </div>
-                     <div className="flex items-center gap-2">
-                        <span className="w-2.5 h-2.5 rounded-full bg-green-500"></span>
-                        <span className="text-[10px] font-bold text-slate-600 uppercase">Positive</span>
-                     </div>
-                  </div>
-               </div>
-               <div className="h-[400px] bg-slate-100 rounded-3xl overflow-hidden relative border border-slate-200 flex items-center justify-center grayscale opacity-60">
-                  <span className="material-symbols-outlined text-8xl text-slate-200">map</span>
-                  <p className="absolute bottom-1/2 text-slate-400 font-black uppercase tracking-widest text-xs">Live District GIS Layer Active</p>
                </div>
             </div>
           </div>
