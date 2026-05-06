@@ -4,9 +4,7 @@
     {
       "src": "frontend/package.json",
       "use": "@vercel/static-build",
-      "config": {
-        "distDir": "dist"
-      }
+      "config": { "distDir": "dist" }
     },
     {
       "src": "backend/main.py",
@@ -15,46 +13,24 @@
   ],
   "routes": [
     {
-      "src": "/favicon.ico",
-      "dest": "frontend/dist/favicon.svg"
-    },
-    {
       "src": "/api/(.*)",
-      "dest": "backend/main.py"
+      "dest": "/backend/main.py"
     },
     {
       "src": "/ws/(.*)",
-      "dest": "backend/main.py"
+      "dest": "/backend/main.py"
+    },
+    {
+      "src": "/favicon.ico",
+      "dest": "/frontend/favicon.svg"
     },
     {
       "src": "/assets/(.*)",
-      "dest": "frontend/dist/assets/$1"
-    },
-    {
-      "src": "/icons.svg",
-      "dest": "frontend/dist/icons.svg"
-    },
-    {
-      "src": "/favicon.svg",
-      "dest": "frontend/dist/favicon.svg"
-    },
-    {
-      "handle": "filesystem"
+      "dest": "/frontend/assets/$1"
     },
     {
       "src": "/(.*)",
-      "dest": "frontend/dist/index.html"
-    }
-  ],
-  "headers": [
-    {
-      "source": "/(.*)",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "s-maxage=0"
-        }
-      ]
+      "dest": "/frontend/index.html"
     }
   ]
 }
