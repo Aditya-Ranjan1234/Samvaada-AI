@@ -1,61 +1,62 @@
-# Samvaada AI | CivicVoice Intelligence Platform
+# Samvaada AI | CivicVoice Intelligence Platform 🇮🇳
 
-Samvaada AI is a professional-grade, government-standard helpline intelligence platform. It provides real-time multilingual voice transcription, automated intent analysis (NLU), and supervisor analytics for large-scale administrative operations.
+Samvaada AI is a professional-grade, government-standard helpline intelligence platform built for the **AI for Bharat** challenge. It bridges the communication gap between citizens and administration through real-time multilingual AI orchestration.
 
-## 🚀 Key Features
-- **Real-time Transcription**: Powered by local Whisper v3 models.
-- **Indic NLU**: Intent and entity extraction for Indian languages using IndicBERT.
-- **Supervisor Dashboard**: Live district-level sentiment heatmaps and operation KPIs.
-- **Secure Operator Portal**: High-authority "CivicVoice" UI with 2FA simulation.
-- **100% Local**: Optimized for offline/air-gapped government environments.
+## 🌟 Core Value Proposition
+Samvaada AI transforms traditional helplines into "Intelligent Civic Workstations." It automates the transcription, language detection, and response generation for Indian languages, allowing operators to handle complex civic issues with high-precision AI assistance.
+
+## 🚀 Key Functionalities
+
+### 1. Live Intelligence Workstation (Agent Dashboard)
+- **Live Mic Simulation**: Real-time voice-to-text processing directly in the browser.
+- **Multilingual Auto-Detection**: Seamlessly switches between **Kannada, Hindi, and English** using the MMS-LID (Language Identification) model.
+- **AI-Generated Replies**: Integrated with **Groq Llama-3-8B** to provide empathetic, context-aware responses in the citizen's native tongue.
+- **Entity & Intent Mapping**: Automatically extracts locations (e.g., "Richmond Road") and issue types (e.g., "Water Leakage").
+
+### 2. Supervisor Oversight & Analytics
+- **Operational KPIs**: Live tracking of call volume, agent accuracy, and average handling time (AHT).
+- **Intent Trending**: Visualizes the most reported civic issues across districts.
+- **Agent Performance**: Deep-dive into operator stats and verification scores.
+
+### 3. High-Authority Design System
+- **CivicVoice UI**: A curated design system using government-standard typography (Public Sans) and a "Clear Trust" color palette.
+- **Interactive Panels**: Slide-over system settings and operator profile management.
+
+## 🏗️ Technology Stack
+- **Frontend**: React 19, Vite, Tailwind CSS v4, Material Symbols.
+- **Backend**: FastAPI (Python 3.10+), SQLAlchemy.
+- **Intelligence**: Groq Llama-3, Hugging Face Inference API, OpenAI Whisper.
+- **Database**: PostgreSQL (Supabase) for persistent call logs and agent metrics.
+- **Deployment**: Vercel (Monorepo architecture with serverless Python functions).
 
 ## 📁 Project Structure
-- `/frontend`: React + Vite + Tailwind v4 (UI Workstation)
-- `/backend`: FastAPI + Python (Intelligence Engine)
-- `/ml-models`: Local storage for Whisper and IndicBERT weights.
-- `/scripts`: Automation for model acquisition and system health.
+- `/frontend`: React workstation UI.
+- `/backend`: Intelligence engine and API routes.
+- `/scripts`: Utility scripts for local model management.
+- `vercel.json`: Cloud orchestration and routing configuration.
 
-## 🛠️ How to Run Locally
+## 🛠️ Instructions to Run
 
-### 1. Prerequisites
-- Python 3.10+
-- Node.js 18+
-- Virtual Environment (venv)
+### Local Environment
+1. **Clone & Install**:
+   ```bash
+   git clone https://github.com/Aditya-Ranjan1234/Samvaada-AI.git
+   cd samvaada-ai
+   pip install -r backend/requirements.txt
+   cd frontend && npm install
+   ```
+2. **Setup AI Models**:
+   ```bash
+   python scripts/download_models.py
+   ```
+3. **Launch**:
+   - Backend: `uvicorn backend.app.main:app --reload`
+   - Frontend: `npm run dev` (inside `/frontend`)
 
-### 2. Setup Backend
-```powershell
-cd backend
-# Create and activate venv
-python -m venv venv
-.\venv\Scripts\activate
-
-# Install dependencies
-pip install -r requirements.txt
-
-# Download ML Models (First time only)
-python ..\scripts\download_models.py
-
-# Run server
-uvicorn app.main:app --reload --port 8000
-```
-
-### 3. Setup Frontend
-```powershell
-cd frontend
-npm install
-npm run dev
-```
-Open [http://localhost:5176](http://localhost:5176) to access the portal.
-
-## 🌐 Hosting (Vercel / Cloud)
-The project is configured for Vercel via the root `vercel.json`.
-
-**Important Note:** 
-Because this platform uses large-scale ML models (Whisper), the **Backend Intelligence Engine** requires a server with a GPU or significant RAM. For cloud hosting, it is recommended to host the backend on a GPU-enabled VPS or use a dedicated ML host (like Modal or Replicate) and point the frontend to that endpoint.
-
-## 🔑 Default Credentials
-- **Username:** `admin`
-- **Password:** `admin`
+### Vercel Cloud Deployment
+1. Connect your repository to Vercel.
+2. Add `HF_TOKEN` and `GROQ_API_KEY` to Environment Variables.
+3. Vercel will automatically deploy the **Hybrid Cloud Architecture** (<250MB bundle).
 
 ---
-© 2024 Samvaada Civic Intelligence | Built for Bharat
+*Developed for the AI for Bharat Challenge 2026*

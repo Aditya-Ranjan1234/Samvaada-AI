@@ -1,4 +1,20 @@
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+
 const History = () => {
+  const [calls, setCalls] = useState<any[]>([]);
+
+  useEffect(() => {
+    const fetchCalls = async () => {
+      try {
+        const response = await axios.get('/api/v1/calls/');
+        setCalls(response.data);
+      } catch (error) {
+        console.error("Failed to fetch call history", error);
+      }
+    };
+    fetchCalls();
+  }, []);
   return (
     <div className="bg-background text-on-background font-body-md overflow-hidden h-screen flex flex-col">
       {/* TopNavBar */}
@@ -102,18 +118,23 @@ const History = () => {
                       <th className="px-4 py-3 text-label-md text-on-surface-variant">Status</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-slate-100">
-                    <tr className="hover:bg-slate-50 cursor-pointer transition-colors bg-blue-50/30">
-                      <td className="px-4 py-4 text-body-sm font-medium text-blue-900">#SV-8842</td>
-                      <td className="px-4 py-4 text-body-sm text-slate-600">Oct 24, 2023 · 14:22</td>
-                      <td className="px-4 py-4"><span className="text-caption bg-slate-100 text-slate-700 px-2 py-0.5 rounded">KN</span></td>
-                      <td className="px-4 py-4"><span className="text-caption bg-blue-100 text-blue-800 px-2 py-0.5 rounded-full font-semibold">Road Repair</span></td>
-                      <td className="px-4 py-4">
-                        <div className="flex items-center gap-1 text-green-700 font-bold text-caption">
-                          <span className="material-symbols-outlined text-lg" style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span> Verified
-                        </div>
-                      </td>
-                    </tr>
+                   <tbody className="divide-y divide-slate-100">
+                    {calls.map((call, i) => (
+                      <tr key={i} className="hover:bg-slate-50 cursor-pointer transition-colors">
+                        <td className="px-4 py-4 text-body-sm font-medium text-blue-900">{call.call_id}</td>
+                        <td className="px-4 py-4 text-body-sm text-slate-600">{call.timestamp}</td>
+                        <td className="px-4 py-4"><span className="text-caption bg-slate-100 text-slate-700 px-2 py-0.5 rounded">{call.language}</span></td>
+                        <td className="px-4 py-4"><span className="text-caption bg-blue-100 text-blue-800 px-2 py-0.5 rounded-full font-semibold">{call.intent}</span></td>
+                        <td className="px-4 py-4">
+                          <div className={`flex items-center gap-1 font-bold text-caption ${call.status === 'Verified' ? 'text-green-700' : 'text-amber-600'}`}>
+                            <span className="material-symbols-outlined text-lg" style={{ fontVariationSettings: "'FILL' 1" }}>
+                              {call.status === 'Verified' ? 'check_circle' : 'schedule'}
+                            </span> 
+                            {call.status}
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
                   </tbody>
                 </table>
               </div>
