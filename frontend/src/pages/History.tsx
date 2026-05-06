@@ -9,10 +9,16 @@ const History = () => {
     const fetchCalls = async () => {
       try {
         const response = await axios.get('/api/v1/calls/');
-        setCalls(response.data);
-        if (response.data.length > 0) setSelectedCall(response.data[0]);
+        if (Array.isArray(response.data)) {
+          setCalls(response.data);
+          if (response.data.length > 0) setSelectedCall(response.data[0]);
+        } else {
+          console.error("Expected array, got:", response.data);
+          setCalls([]);
+        }
       } catch (error) {
         console.error("Failed to fetch call history", error);
+        setCalls([]);
       }
     };
     fetchCalls();

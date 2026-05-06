@@ -30,10 +30,27 @@ const Dashboard = () => {
     const fetchQueue = async () => {
       try {
         const response = await fetch('/api/v1/calls/');
+        if (!response.ok) {
+          console.error("API error", response.statusText);
+          setQueue([]);
+          return;
+        }
+        const contentType = response.headers.get("content-type");
+        if (!contentType || !contentType.includes("application/json")) {
+          console.error("Expected JSON response, got:", contentType);
+          setQueue([]);
+          return;
+        }
         const data = await response.json();
-        setQueue(data);
+        if (Array.isArray(data)) {
+          setQueue(data);
+        } else {
+          console.error("Expected array, got:", data);
+          setQueue([]);
+        }
       } catch (error) {
         console.error("Queue sync failed", error);
+        setQueue([]);
       }
     };
     fetchQueue();

@@ -1,3 +1,10 @@
+import sys
+import os
+from pathlib import Path
+
+backend_dir = Path(__file__).parent
+sys.path.insert(0, str(backend_dir))
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.routes import calls, asr, nlu, tts, users
