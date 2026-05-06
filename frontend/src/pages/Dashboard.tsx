@@ -23,7 +23,21 @@ const Dashboard = () => {
   const [isListening, setIsListening] = useState(false);
   const [isThinking, setIsThinking] = useState(false);
   const [transcript, setTranscript] = useState<Message[]>([]);
+  const [queue, setQueue] = useState<any[]>([]);
   const [callTimer, setCallTimer] = useState(0);
+
+  useEffect(() => {
+    const fetchQueue = async () => {
+      try {
+        const response = await fetch('/api/v1/calls/');
+        const data = await response.json();
+        setQueue(data);
+      } catch (error) {
+        console.error("Queue sync failed", error);
+      }
+    };
+    fetchQueue();
+  }, []);
   
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioChunksRef = useRef<Blob[]>([]);

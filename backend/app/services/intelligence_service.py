@@ -42,6 +42,9 @@ class IntelligenceService:
 
     def generate_reply(self, text: str, language: str = "eng") -> str:
         """REAL LLM Reply using Groq Llama-3"""
+        if not self.groq_api_key:
+            return "AI Engine Offline: Please configure GROQ_API_KEY in Vercel settings."
+            
         headers = {
             "Authorization": f"Bearer {self.groq_api_key}",
             "Content-Type": "application/json"
@@ -52,9 +55,12 @@ class IntelligenceService:
             "messages": [{"role": "user", "content": prompt}],
             "temperature": 0.5
         }
-        response = requests.post(self.groq_url, headers=headers, json=payload, timeout=15)
-        if response.status_code == 200:
-            return response.json()["choices"][0]["message"]["content"]
-        return "I am processing your request. Please hold."
+        try:
+            response = requests.post(self.groq_url, headers=headers, json=payload, timeout=15)
+            if response.status_code == 200:
+                return response.json()["choices"][0]["message"]["content"]
+            return f"AI Logic Error: {response.status_code}"
+        except:
+            return "Helpline AI is currently undergoing maintenance. Our agent will help you."
 
 intelligence = IntelligenceService()

@@ -78,9 +78,33 @@ async def simulate_call(req: GroqTranscribeRequest):
 
 @router.get("/")
 async def get_all_calls():
-    # Returns a list of real/simulated call history for the history page
+    # Seeding 3 professional simulations as requested
     return [
-        {"call_id": "#SV-8842", "timestamp": "2023-10-24 14:22", "language": "KN", "intent": "Road Repair", "status": "Verified"},
-        {"call_id": "#SV-8843", "timestamp": "2023-10-24 15:10", "language": "EN", "intent": "Water Leakage", "status": "Verified"},
-        {"call_id": "#SV-8844", "timestamp": "2023-10-24 16:05", "language": "HI", "intent": "Electricity", "status": "Pending"}
+        {
+            "call_id": "#SV-8842", 
+            "timestamp": "May 06, 2024 · 10:22", 
+            "language": "KN", 
+            "intent": "Road Repair", 
+            "status": "Verified",
+            "summary": "Citizen reported hazardous pothole in Jayanagar 4th Main. High public safety risk.",
+            "transcript": [{"s": "CITIZEN", "t": "ನಮಸ್ಕಾರ, ಜಯನಗರ 4ನೇ ಮುಖ್ಯ ರಸ್ತೆಯಲ್ಲಿ ದೊಡ್ಡ ಗುಂಡಿ ಇದೆ."}, {"s": "AI", "t": "Understood. Recording a priority road repair complaint for Jayanagar."}]
+        },
+        {
+            "call_id": "#SV-8843", 
+            "timestamp": "May 06, 2024 · 11:10", 
+            "language": "EN", 
+            "intent": "Water Leakage", 
+            "status": "Verified",
+            "summary": "Major pipe burst on Richmond Road. BWSSB team notified for emergency repair.",
+            "transcript": [{"s": "CITIZEN", "t": "There is a massive water leak on Richmond Road near the signal."}, {"s": "AI", "t": "I have flagged this as an emergency for the BWSSB team. Dispatching now."}]
+        },
+        {
+            "call_id": "#SV-8844", 
+            "timestamp": "May 06, 2024 · 12:05", 
+            "language": "HI", 
+            "intent": "Electricity", 
+            "status": "Pending",
+            "summary": "Transformer spark reported in Indiranagar Sector 2. Fire hazard warning issued.",
+            "transcript": [{"s": "CITIZEN", "t": "नमस्ते, यहां ट्रांसफार्मर से चिंगारी निकल रही है।"}, {"s": "AI", "t": "Please stay away from the area. Notifying BESCOM emergency team immediately."}]
+        }
     ]
