@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+// useNavigate removed as it was unused
 
 // Fix for TypeScript Web Speech API
 declare global {
@@ -17,14 +17,12 @@ interface Message {
 }
 
 const Dashboard = () => {
-  const navigate = useNavigate();
   const [showSettings, setShowSettings] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
   const [isCallActive, setIsCallActive] = useState(false);
   const [isListening, setIsListening] = useState(false);
   const [isThinking, setIsThinking] = useState(false);
   const [transcript, setTranscript] = useState<Message[]>([]);
-  const [callId, setCallId] = useState('');
   const [callTimer, setCallTimer] = useState(0);
   
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
@@ -52,7 +50,6 @@ const Dashboard = () => {
   const now = () => new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
 
   const startCall = async () => {
-    setCallId(`CALL-${Math.floor(Math.random() * 9000) + 1000}`);
     setTranscript([{
       speaker: 'AI',
       text: 'Namaskara! Karnataka 1092 Helpline. I am your AI assistant. How may I help you today?',
@@ -191,10 +188,16 @@ const Dashboard = () => {
           <div className="p-5 border-b border-slate-100">
             <h3 className="text-sm font-bold text-slate-800">Queue Status</h3>
           </div>
-          {!isCallActive && (
+          {!isCallActive ? (
             <div className="p-4 mt-auto">
               <button onClick={startCall} className="w-full py-3 bg-blue-600 text-white font-bold rounded-xl flex items-center justify-center gap-2 hover:bg-blue-700 shadow-lg active:scale-95 transition-all">
                 <span className="material-symbols-outlined">add_call</span> Start Call
+              </button>
+            </div>
+          ) : (
+            <div className="p-4 mt-auto">
+              <button onClick={endCall} className="w-full py-3 bg-red-600 text-white font-bold rounded-xl flex items-center justify-center gap-2 hover:bg-red-700 shadow-lg active:scale-95 transition-all">
+                <span className="material-symbols-outlined">call_end</span> End Call
               </button>
             </div>
           )}
