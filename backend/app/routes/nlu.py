@@ -7,8 +7,8 @@ router = APIRouter()
 
 @router.post("/process")
 async def process_interaction(file: UploadFile = File(...)):
-    # 1. Save audio to temporary file for processing
-    temp_filename = f"temp_{uuid.uuid4()}.wav"
+    # 1. Save audio to temporary file for processing in Vercel's writable /tmp directory
+    temp_filename = f"/tmp/temp_{uuid.uuid4()}.wav"
     with open(temp_filename, "wb") as buffer:
         content = await file.read()
         buffer.write(content)
