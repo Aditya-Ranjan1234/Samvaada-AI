@@ -121,13 +121,44 @@ class SaveCallRequest(BaseModel):
 @router.post("/save")
 async def save_call(req: SaveCallRequest):
     import datetime
+    global CALLS_DB
+    
+    # Remove any previously saved dummy "Live Simulation" entries
+    CALLS_DB = [c for c in CALLS_DB if c.get("intent") not in ["Live Simulation", "Live Call"]]
+
+    intent = req.intent
+    summary = req.summary
+
+    # Dynamically extract actual intent and summary if it's the default frontend payload
+    if intent in ["Live Simulation", "Live Call"]:
+        try:
+            full_text = " ".join([m.get("t", "") for m in req.transcript])
+            prompt = f"Analyze this conversation: '{full_text}'. Provide a 1-3 word Intent, and a 1-sentence Summary. Reply EXACTLY in this format: INTENT: <intent>|SUMMARY: <summary>"
+            
+            headers = {"Authorization": f"Bearer {GROQ_API_KEY}", "Content-Type": "application/json"}
+            payload = {
+                "model": "llama-3.1-8b-instant",
+                "messages": [{"role": "user", "content": prompt}],
+                "temperature": 0.3,
+                "max_tokens": 100,
+            }
+            response = requests.post(GROQ_URL, headers=headers, json=payload, timeout=10)
+            if response.status_code == 200:
+                result = response.json()["choices"][0]["message"]["content"]
+                if "INTENT:" in result and "|SUMMARY:" in result:
+                    parts = result.split("|SUMMARY:")
+                    intent = parts[0].replace("INTENT:", "").strip()
+                    summary = parts[1].strip()
+        except Exception:
+            pass # Fallback to defaults if extraction fails
+
     new_call = {
         "call_id": req.call_id,
-        "timestamp": datetime.datetime.utcnow().strftime("%b %d, %Y · %H:%M"),
+        "timestamp": datetime.datetime.now().strftime("%b %d, %Y · %H:%M"),
         "language": req.language.upper()[:2],
-        "intent": req.intent,
+        "intent": intent,
         "status": "Verified",
-        "summary": req.summary,
+        "summary": summary,
         "transcript": req.transcript
     }
     # Add to beginning of the in-memory DB so it shows at the top of the queue
