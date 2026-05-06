@@ -202,6 +202,20 @@ const Dashboard = () => {
           <div className="p-5 border-b border-slate-100">
             <h3 className="text-sm font-bold text-slate-800">Queue Status</h3>
           </div>
+          <div className="flex-1 overflow-y-auto custom-scrollbar">
+            {queue.map((call, i) => (
+              <div key={i} className="p-5 border-b border-slate-50 hover:bg-slate-50 cursor-pointer transition-all">
+                <div className="flex justify-between items-start mb-2">
+                  <span className="text-[10px] font-black text-slate-400">{call.call_id}</span>
+                  <span className={`text-[9px] font-black px-1.5 py-0.5 rounded ${call.status === 'Verified' ? 'bg-green-100 text-green-600' : 'bg-amber-100 text-amber-600'}`}>
+                    {call.status}
+                  </span>
+                </div>
+                <div className="text-sm font-bold text-slate-900 mb-1">{call.intent}</div>
+                <div className="text-[10px] font-bold text-slate-500">{call.timestamp}</div>
+              </div>
+            ))}
+          </div>
           {!isCallActive ? (
             <div className="p-4 mt-auto">
               <button onClick={startCall} className="w-full py-3 bg-blue-600 text-white font-bold rounded-xl flex items-center justify-center gap-2 hover:bg-blue-700 shadow-lg active:scale-95 transition-all">
