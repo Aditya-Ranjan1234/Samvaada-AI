@@ -7,26 +7,26 @@
       "config": { "distDir": "dist" }
     },
     {
-      "src": "backend/app/main.py",
+      "src": "backend/main.py",
       "use": "@vercel/python"
     }
   ],
   "rewrites": [
     {
       "source": "/api/(.*)",
-      "destination": "backend/app/main.py"
+      "destination": "backend/main.py"
     },
     {
       "source": "/ws/(.*)",
-      "destination": "backend/app/main.py"
+      "destination": "backend/main.py"
     },
     {
       "source": "/assets/(.*)",
-      "destination": "/frontend/assets/$1"
+      "destination": "/frontend/dist/assets/$1"
     },
     {
       "source": "/(.*)",
-      "destination": "/frontend/index.html"
+      "destination": "/frontend/dist/index.html"
     }
   ]
 }
