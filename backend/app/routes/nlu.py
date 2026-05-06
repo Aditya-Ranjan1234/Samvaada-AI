@@ -1,27 +1,35 @@
 from fastapi import APIRouter, UploadFile, File
 from app.services.intelligence_service import intelligence
 import os
+import uuid
 
 router = APIRouter()
 
 @router.post("/process")
-async def process_interaction(file: File = UploadFile(...)):
-    # 1. Read audio data
-    audio_data = await file.read()
+async def process_interaction(file: UploadFile = File(...)):
+    # 1. Save audio to temporary file for processing
+    temp_filename = f"temp_{uuid.uuid4()}.wav"
+    with open(temp_filename, "wb") as buffer:
+        content = await file.read()
+        buffer.write(content)
     
-    # 2. Detect Language (Auto-Detection)
-    detected_lang = intelligence.detect_language(audio_data)
-    
-    # 3. Simulate Transcription (In a full loop, this would call ASR)
-    # For now, we return the intelligence analysis
-    transcript = "ನನಗೆ ಕುಡಿಯುವ ನೀರಿನ ಸಮಸ್ಯೆ ಇದೆ" # Simulated transcript for demo
-    
-    # 4. Generate AI Reply in the detected language
-    reply = intelligence.generate_reply(transcript, language=detected_lang)
-    
-    return {
-        "detected_language": detected_lang,
-        "transcript": transcript,
-        "ai_reply": reply,
-        "status": "success"
-    }
+    try:
+        # 2. Detect Language (Auto-Detection)
+        detected_lang = intelligence.detect_language(content)
+        
+        # 3. REAL Transcription using Groq Whisper
+        transcript = intelligence.transcribe_audio(temp_filename)
+        
+        # 4. Generate AI Reply in the detected language using Llama-3
+        reply = intelligence.generate_reply(transcript, language=detected_lang)
+        
+        return {
+            "detected_language": detected_lang,
+            "transcript": transcript,
+            "ai_reply": reply,
+            "status": "success"
+        }
+    finally:
+        # Clean up temp file
+        if os.path.exists(temp_filename):
+            os.remove(temp_filename)
