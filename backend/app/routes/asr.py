@@ -10,7 +10,7 @@ HF_API_URL = "https://api-inference.huggingface.co/models/openai/whisper-tiny"
 HF_TOKEN = os.getenv("HF_TOKEN") # Add this to your Vercel Environment Variables
 
 @router.post("/transcribe")
-async def transcribe_audio(file: File = UploadFile(...)):
+async def transcribe_audio(file: UploadFile = File(...)):
     # Check if we should use local or cloud models
     if os.getenv("VERCEL"):
         # CLOUD MODE: Call Hugging Face API
