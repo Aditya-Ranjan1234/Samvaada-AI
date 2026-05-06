@@ -9,7 +9,6 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.routes import calls, asr, nlu, tts, users
 from app.websocket import manager
-from app.database import init_db
 import logging
 
 # Configure logging
@@ -21,13 +20,6 @@ app = FastAPI(
     description="Backend API for Samvaada AI Helpline System",
     version="1.0.0"
 )
-
-# Safe Database Initialization
-try:
-    init_db()
-    logger.info("Database initialized successfully.")
-except Exception as e:
-    logger.error(f"Database initialization failed: {e}")
 
 # CORS
 app.add_middleware(
