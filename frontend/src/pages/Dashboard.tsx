@@ -221,7 +221,15 @@ const Dashboard = () => {
           </div>
           <div className="flex-1 overflow-y-auto custom-scrollbar">
             {queue.map((call, i) => (
-              <div key={i} className="p-5 border-b border-slate-50 hover:bg-slate-50 cursor-pointer transition-all">
+              <div key={i} onClick={() => {
+                if (call.transcript) {
+                  setTranscript(call.transcript.map((msg: any) => ({
+                    speaker: msg.s,
+                    text: msg.t,
+                    time: ''
+                  })));
+                }
+              }} className="p-5 border-b border-slate-50 hover:bg-slate-50 cursor-pointer transition-all">
                 <div className="flex justify-between items-start mb-2">
                   <span className="text-[10px] font-black text-slate-400">{call.call_id}</span>
                   <span className={`text-[9px] font-black px-1.5 py-0.5 rounded ${call.status === 'Verified' ? 'bg-green-100 text-green-600' : 'bg-amber-100 text-amber-600'}`}>

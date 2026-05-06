@@ -32,7 +32,7 @@ def groq_reply(user_text: str, language: str = "English") -> str:
         f"Keep the response under 60 words. Identify their issue and confirm next steps."
     )
     payload = {
-        "model": "llama3-8b-8192",
+        "model": "llama-3.1-8b-instant",
         "messages": [
             {"role": "system", "content": system_prompt},
             {"role": "user",   "content": user_text},

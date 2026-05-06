@@ -51,7 +51,7 @@ class IntelligenceService:
         }
         prompt = f"As a Karnataka Helpline Agent, reply to this in {language}: {text}. Keep it under 50 words."
         payload = {
-            "model": "llama3-8b-8192",
+            "model": "llama-3.1-8b-instant",
             "messages": [{"role": "user", "content": prompt}],
             "temperature": 0.5
         }
