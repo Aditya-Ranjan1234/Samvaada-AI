@@ -90,9 +90,38 @@ const Dashboard = () => {
     setIsCallActive(true);
   };
 
-  const endCall = () => {
+  const endCall = async () => {
     setIsCallActive(false);
     setIsListening(false);
+
+    if (transcript.length > 1) {
+      try {
+        const formattedTranscript = transcript.map(msg => ({
+          s: msg.speaker,
+          t: msg.text
+        }));
+        
+        await fetch('/api/v1/calls/save', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            call_id: `#SV-${Math.floor(Math.random() * 9000) + 1000}`,
+            transcript: formattedTranscript,
+            intent: "Live Simulation",
+            summary: "Agent simulated a real-time interaction via AI pipeline.",
+            language: transcript[transcript.length - 1].language || "EN"
+          })
+        });
+        
+        const response = await fetch('/api/v1/calls/');
+        if (response.ok) {
+            const data = await response.json();
+            if (Array.isArray(data)) setQueue(data);
+        }
+      } catch (e) {
+        console.error("Failed to save call", e);
+      }
+    }
   };
 
   // ── REAL AUDIO CAPTURE (Not Simulated) ────────────────────────────────

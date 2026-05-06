@@ -76,35 +76,60 @@ async def simulate_call(req: GroqTranscribeRequest):
         "status": "success",
     }
 
+CALLS_DB = [
+    {
+        "call_id": "#SV-8842", 
+        "timestamp": "May 06, 2024 · 10:22", 
+        "language": "KN", 
+        "intent": "Road Repair", 
+        "status": "Verified",
+        "summary": "Citizen reported hazardous pothole in Jayanagar 4th Main. High public safety risk.",
+        "transcript": [{"s": "CITIZEN", "t": "ನಮಸ್ಕಾರ, ಜಯನಗರ 4ನೇ ಮುಖ್ಯ ರಸ್ತೆಯಲ್ಲಿ ದೊಡ್ಡ ಗುಂಡಿ ಇದೆ."}, {"s": "AI", "t": "Understood. Recording a priority road repair complaint for Jayanagar."}]
+    },
+    {
+        "call_id": "#SV-8843", 
+        "timestamp": "May 06, 2024 · 11:10", 
+        "language": "EN", 
+        "intent": "Water Leakage", 
+        "status": "Verified",
+        "summary": "Major pipe burst on Richmond Road. BWSSB team notified for emergency repair.",
+        "transcript": [{"s": "CITIZEN", "t": "There is a massive water leak on Richmond Road near the signal."}, {"s": "AI", "t": "I have flagged this as an emergency for the BWSSB team. Dispatching now."}]
+    },
+    {
+        "call_id": "#SV-8844", 
+        "timestamp": "May 06, 2024 · 12:05", 
+        "language": "HI", 
+        "intent": "Electricity", 
+        "status": "Pending",
+        "summary": "Transformer spark reported in Indiranagar Sector 2. Fire hazard warning issued.",
+        "transcript": [{"s": "CITIZEN", "t": "नमस्ते, यहां ट्रांसफार्मर से चिंगारी निकल रही है।"}, {"s": "AI", "t": "Please stay away from the area. Notifying BESCOM emergency team immediately."}]
+    }
+]
+
 @router.get("/")
 async def get_all_calls():
-    # Seeding 3 professional simulations as requested
-    return [
-        {
-            "call_id": "#SV-8842", 
-            "timestamp": "May 06, 2024 · 10:22", 
-            "language": "KN", 
-            "intent": "Road Repair", 
-            "status": "Verified",
-            "summary": "Citizen reported hazardous pothole in Jayanagar 4th Main. High public safety risk.",
-            "transcript": [{"s": "CITIZEN", "t": "ನಮಸ್ಕಾರ, ಜಯನಗರ 4ನೇ ಮುಖ್ಯ ರಸ್ತೆಯಲ್ಲಿ ದೊಡ್ಡ ಗುಂಡಿ ಇದೆ."}, {"s": "AI", "t": "Understood. Recording a priority road repair complaint for Jayanagar."}]
-        },
-        {
-            "call_id": "#SV-8843", 
-            "timestamp": "May 06, 2024 · 11:10", 
-            "language": "EN", 
-            "intent": "Water Leakage", 
-            "status": "Verified",
-            "summary": "Major pipe burst on Richmond Road. BWSSB team notified for emergency repair.",
-            "transcript": [{"s": "CITIZEN", "t": "There is a massive water leak on Richmond Road near the signal."}, {"s": "AI", "t": "I have flagged this as an emergency for the BWSSB team. Dispatching now."}]
-        },
-        {
-            "call_id": "#SV-8844", 
-            "timestamp": "May 06, 2024 · 12:05", 
-            "language": "HI", 
-            "intent": "Electricity", 
-            "status": "Pending",
-            "summary": "Transformer spark reported in Indiranagar Sector 2. Fire hazard warning issued.",
-            "transcript": [{"s": "CITIZEN", "t": "नमस्ते, यहां ट्रांसफार्मर से चिंगारी निकल रही है।"}, {"s": "AI", "t": "Please stay away from the area. Notifying BESCOM emergency team immediately."}]
-        }
-    ]
+    # Returns in-memory simulated calls database
+    return CALLS_DB
+
+class SaveCallRequest(BaseModel):
+    call_id: str
+    transcript: list
+    intent: str = "Live Call"
+    summary: str = "Simulated real-time interaction via AI agent."
+    language: str = "EN"
+
+@router.post("/save")
+async def save_call(req: SaveCallRequest):
+    import datetime
+    new_call = {
+        "call_id": req.call_id,
+        "timestamp": datetime.datetime.utcnow().strftime("%b %d, %Y · %H:%M"),
+        "language": req.language.upper()[:2],
+        "intent": req.intent,
+        "status": "Verified",
+        "summary": req.summary,
+        "transcript": req.transcript
+    }
+    # Add to beginning of the in-memory DB so it shows at the top of the queue
+    CALLS_DB.insert(0, new_call)
+    return {"status": "success", "call": new_call}
